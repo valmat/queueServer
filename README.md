@@ -16,7 +16,7 @@ queueServer has a simple purpose -- it atomically assigns tasks. It remembers wh
 
 
 ## How to customize
-Just edit [configs.ini](server/bin/configs.ini) (serverside), [configs.js](сlient/configs.js) (clientside)
+Just edit [configs.ini](server/bin/configs.ini) (serverside), [configs.js](client/configs.js) (clientside)
 
 
 ## License
