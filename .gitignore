@@ -9,3 +9,5 @@
 ~*
 server/db/*
 server/bin/hr_bk.sh
+client/node_modules/*
+
