@@ -16,7 +16,7 @@ queueServer has a simple purpose -- it atomically assigns tasks. It remembers wh
 
 
 ## How to customize
-Just edit [config.ini](bin/config.ini)
+Just edit [config.ini](server/bin/config.ini)
 
 ## License
 [BSD](LICENSE)

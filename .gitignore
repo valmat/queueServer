@@ -7,5 +7,5 @@
 *.log
 *.gch
 ~*
-db/*
-bin/hr_bk.sh
+server/db/*
+server/bin/hr_bk.sh
