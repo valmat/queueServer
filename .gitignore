@@ -1,0 +1,11 @@
+*.o
+*.a
+*.so
+*.so.*
+*.bin
+*.txt
+*.log
+*.gch
+~*
+db/*
+bin/hr_bk.sh
