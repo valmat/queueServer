@@ -2,9 +2,9 @@
 
 "use strict"
 
-const options       = require('./configs.js');
-const rocks_handler = require('./node_rocks/handler.js');
-const handler       = new rocks_handler(options);
+const options      = require('./configs.js');
+const RocksHandler = require('./node_rocks/handler.js');
+const handler      = new RocksHandler(options);
 
 
 

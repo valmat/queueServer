@@ -4,8 +4,9 @@
 
 "use strict"
 
-const options       = require('./configs.js');
-const rocks_handler = require('./node_rocks/handler.js');
+const options      = require('./configs.js');
+const RocksHandler = require('./node_rocks/handler.js');
+const handler      = new RocksHandler(options);
 
 const fs         = require('fs');
 const lineReader = require('line-reader');
@@ -13,7 +14,7 @@ const lineReader = require('line-reader');
 const from_pref  = options.prefixes.famaly + options.prefixes.started;
 const to_pref    = options.prefixes.famaly + options.prefixes.finished;
 
-const handler    = new rocks_handler(options);
+
 
 
 if (!process.argv[4]) {

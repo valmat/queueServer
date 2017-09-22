@@ -4,14 +4,12 @@
 
 "use strict"
 
-const options = require('./configs.js');
-const rocks_handler = require('./node_rocks/handler.js');
+const options      = require('./configs.js');
+const RocksHandler = require('./node_rocks/handler.js');
+const handler      = new RocksHandler(options);
 
-
-const from_pref  = options.prefixes.famaly + options.prefixes.created;
-const to_pref    = options.prefixes.famaly + options.prefixes.started;
-
-const handler    = new rocks_handler(options);
+const from_pref = options.prefixes.famaly + options.prefixes.created;
+const to_pref   = options.prefixes.famaly + options.prefixes.started;
 
 handler.moveKey(from_pref, to_pref, function(isOk, pair) {
     if(!isOk) {

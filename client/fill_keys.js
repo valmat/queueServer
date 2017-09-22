@@ -4,9 +4,8 @@
 
 "use strict"
 
-const options = require('./configs.js');
-const rocks_handler = require('./node_rocks/handler.js');
-
+const options      = require('./configs.js');
+const RocksHandler = require('./node_rocks/handler.js');
 
 const lineReader = require('line-reader');
 const values     = new Map();
@@ -19,7 +18,7 @@ lineReader.eachLine(options.fill.file, function(line, last) {
 
     line_nom++;
     if (last) {
-        const handler = new rocks_handler(options);
+        const handler = new RocksHandler(options);
         handler.setMap(values, function(ok) {
             console.log({values_set:ok, values_size: values.size});
         });
