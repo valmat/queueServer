@@ -13,7 +13,6 @@ function RocksResponse(body) {
     this._body = body;
 }
 
-
 // Read line before '\n'
 RocksResponse.prototype.read = function(len = 0) {
     if(0 == len) {
@@ -53,7 +52,6 @@ RocksResponse.prototype.mgetIterator = function* () {
         yield this.getPair();
     }
 }
-
 
 RocksResponse.prototype.raw = function() {
     return this._body;
