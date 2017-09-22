@@ -3,7 +3,7 @@
 "use strict"
 
 
-const rocks_response = require('./response.js');
+const RocksResponse = require('./response.js');
 
 
 const net = require('net');
@@ -15,7 +15,7 @@ function RocksHandler(options) {
     this._server = options.server;
 }
 
-
+// implements common http post method
 RocksHandler.prototype.httpPost = function(path, on_response, data = null) {
     const client = new net.Socket();
 
@@ -40,6 +40,7 @@ RocksHandler.prototype.httpPost = function(path, on_response, data = null) {
     client.on('close', empty_fun);
 }
 
+// implements common http get method
 RocksHandler.prototype.httpGet = function(path, on_response, data = null) {
     const client = new net.Socket();
     client.connect(this._server.port, this._server.host, function() {
@@ -60,7 +61,8 @@ RocksHandler.prototype.get = function(key, on_response) {
     }, key);
 }
 
-
+// Move value by keys prefixes.
+// Finds first key starts with prefix `from` and replace its prefix to `to`
 RocksHandler.prototype.moveKey = function(from, to, on_response = empty_fun) {
     this.httpPost('move-fpref', function(resp) {
         on_response(resp.isOk(), resp.getPair());
@@ -75,14 +77,14 @@ RocksHandler.prototype.set = function(key, val, on_response = empty_fun) {
     }, [key, new String(val).length, val].join('\n'));
 }
 
-// multi set values for keys
+// multiply set values for keys
 RocksHandler.prototype.setObj = function(obj, on_response = empty_fun) {
     this.httpPost('mset', function(resp) {
         on_response(resp.isOk());
-    }, _data2str(obj));
+    }, _obj2str(obj));
 }
-// multi set values for keys
-// Принимает объект типа Map или итерируемый объект (массив) пар [key, value]
+// multiply set values for keys
+// Accepts an object of type Map or iterable object (array) of pairs [key, value]
 RocksHandler.prototype.setMap = function(map, on_response = empty_fun) {
     let data = '';
     for(let pair of map) {
@@ -103,13 +105,14 @@ RocksHandler.prototype.del = function(key, on_response = empty_fun) {
     }, key);
 }
 
+// remove multiply keys from db
 RocksHandler.prototype.mdel = function(keys, on_response = empty_fun) {
     this.httpPost('mdel', function(resp) {
         on_response(resp.isOk());
     }, keys.join('\n'));
 }
 
-// Получить первый ключ подходящий к префиксу
+// Finds first key starts with prefix and retrive its pair
 RocksHandler.prototype.firstPref = function(prefix, on_response) {
     this.httpGet('first-pref', function(resp) {
         on_response(resp.getPair());
@@ -147,7 +150,7 @@ RocksHandler.prototype.mget = function(keys, on_response) {
 }
 
 // multi get all key-value pairs (by key-prefix)
-// @return MgetIterator
+// returns MgetIterator
 RocksHandler.prototype.getall = function(prefix = null, on_response) {
     let cb = function(resp) {
         on_response(resp.mgetIterator());
@@ -159,23 +162,22 @@ RocksHandler.prototype.getall = function(prefix = null, on_response) {
 
 
 
-
-///////////////////////////////////////////
+// private:
 
 
 function _on_response(client, response, on_response) {
-    let [headers, ...body] = new String(response).split('\r\n\r\n');
-    body = body.join('\r\n\r\n');
+    // Retrive body from HTTP responce
+    let body = new String(response.slice(response.indexOf('\r\n\r\n') + 4));
 
-    client.destroy(); // kill client after server's response
-    on_response(new rocks_response(body));
+    client.destroy();
+    on_response(new RocksResponse(body));
 }
 
 function _getBinarySize(str) {
     return Buffer.byteLength(str, 'utf8');
 }
 
-function _data2str(obj) {
+function _obj2str(obj) {
     let ret = '';
     for(let key of Object.keys(obj)) {
         let val = new String(obj[key]);

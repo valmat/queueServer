@@ -5,19 +5,12 @@
 
 "use strict"
 
-const options = require('./configs.js');
-
-
-const rocks_handler = require('./handler.js');
-
-
+const options      = require('../configs.js');
+const RocksHandler = require('./handler.js');
+const handler      = new RocksHandler(options);
 
 
 
-
-
-
-const handler = new rocks_handler(options);
 
 /*
 const from = 'key:';
@@ -98,11 +91,11 @@ handler.incr('incr2', 5, function(ok) {
 });
 
 
-handler.incrGet('incr3', null, function(ok) {
-    console.log({ok});
+handler.incrGet('incr3', null, function(val) {
+    console.log({val});
 });
-handler.incrGet('incr4', 5, function(ok) {
-    console.log({ok});
+handler.incrGet('incr4', 5, function(val) {
+    console.log({val});
 });
 
 
@@ -130,5 +123,8 @@ handler.getall(null, function(resp) {
 
 */
 
+handler.incrGet('incr4', 5, function(val) {
+    console.log({val});
+});
 
 
