@@ -11,7 +11,7 @@ const handler       = new rocks_handler(options);
 const pref = options.prefixes.famaly ? options.prefixes.famaly : null;
 
 let keys = [];
-handler.getall(null, function(resp) {
+handler.getall(pref, function(resp) {
     for(let pair of resp) {
         keys.push(pair.key)
     }
