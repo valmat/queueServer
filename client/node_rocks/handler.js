@@ -8,7 +8,8 @@ const net           = require('net');
 
 const empty_fun = function() {};
 
-class RocksHandler {
+class RocksHandler
+{
     constructor(options) {
         this._server = options.server;
     }
@@ -90,7 +91,7 @@ class RocksHandler {
     setMap(map, on_response = empty_fun) {
         let data = '';
         for(let pair of map) {
-            data += `${pair[0]}\n${_raw_size(pair[1])}\n${val}\n`;
+            data += `${pair[0]}\n${_raw_size(pair[1])}\n${pair[1]}\n`;
         }
 
         this.httpPost('mset', function(resp) {
