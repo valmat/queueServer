@@ -5,7 +5,7 @@
  *  Возвращает первую пару соответствующую префиксу ключа
  *
  *  @author valmat <ufabiz@gmail.com>
- *  @github https://github.com/valmat/rocksserver
+ *  @github https://github.com/valmat/queueServer
  */
 #pragma once
 

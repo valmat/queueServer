@@ -1,6 +1,6 @@
 /**
- *  categories.cpp
- *  Управление разделами
+ *  RocksServer plugin
+ *  https://github.com/valmat/queueServer
  */
 
 #include "../include.h"
@@ -16,19 +16,8 @@ using namespace RocksServer;
 /*
  * Create plugin
  * 
- * You can use one of the following forms of macro PLUGIN with one, two or three arguments:
- *
- * PLUGIN(Extension extension, RocksDBWrapper& rdb, const IniConfigs& cfg)
- * PLUGIN(Extension extension, RocksDBWrapper& rdb)
- * PLUGIN(Extension extension)
- *
- * The macro `PLUGIN` is defined in rocksserver/api.h. 
- * Instead of using the macro, you can write
- * `extern "C" void plugin(...)` if you like
- *
  * @param extension  object of Extension
  * @param rdb        wrapped object of RocksDB
- * @param cfg        Reference to configuration settings
  */
 PLUGIN(Extension extension, RocksDBWrapper& rdb)
 {

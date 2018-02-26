@@ -7,7 +7,7 @@
  *  Базу ключа и значение
  *
  *  @author valmat <ufabiz@gmail.com>
- *  @github https://github.com/valmat/rocksserver
+ *  @github https://github.com/valmat/queueServer
  */
 
 #include "../include.h"
