@@ -7,11 +7,10 @@ function Pair(key = null, value = null) {
     this.value = value;
 }
 
-
-
 function RocksResponse(body) {
     this._body = body;
 }
+
 
 // Read line before '\n'
 RocksResponse.prototype.read = function(len = 0) {
@@ -32,11 +31,11 @@ RocksResponse.prototype.isOk = function() {
 }
 
 RocksResponse.prototype.getValue = function() {
-    if(!this._body.length) {
+    if(!this.size()) {
         return null;
     }
     let val_len = parseInt(this.read());
-    if(val_len < 0 || !this._body.length) {
+    if(val_len < 0 || !this.size()) {
         return null;
     }
     return val_len ? this.read(val_len) : '';
@@ -48,7 +47,7 @@ RocksResponse.prototype.getPair = function() {
 }
 
 RocksResponse.prototype.mgetIterator = function* () {
-    while(this._body.length) {
+    while(this.size()) {
         yield this.getPair();
     }
 }
@@ -56,5 +55,10 @@ RocksResponse.prototype.mgetIterator = function* () {
 RocksResponse.prototype.raw = function() {
     return this._body;
 }
+
+RocksResponse.prototype.size = function() {
+    return Buffer.byteLength(this._body, 'utf8')
+}
+
 
 module.exports = RocksResponse;

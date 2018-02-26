@@ -22,7 +22,9 @@ class RocksHandler {
             //console.log({data})
             if(null != data) {
                 client.write("Content-Type: application/x-www-form-urlencoded; charset=UTF-8\r\n");
-                client.write("Content-Length: " + data.length + "\r\n");
+                //client.write("Content-Length: " + data.length + "\r\n");
+                client.write("Content-Length: " + _raw_size(data) + "\r\n");
+                
                 client.write("Connection: Close\r\n");
                 client.write("\r\n");
                 client.write(data);
@@ -72,7 +74,8 @@ class RocksHandler {
     set(key, val, on_response = empty_fun) {
         this.httpPost('set', function(resp) {
             on_response(resp.isOk());
-        }, [key, new String(val).length, val].join('\n'));
+        }, [key, _raw_size(val), val].join('\n'));
+
     }
 
     // multiply set values for keys
@@ -87,9 +90,7 @@ class RocksHandler {
     setMap(map, on_response = empty_fun) {
         let data = '';
         for(let pair of map) {
-            //console.log({pair});
-            let val = new String(pair[1]);
-            data += `${pair[0]}\n${val.length}\n${val}\n`;
+            data += `${pair[0]}\n${_raw_size(pair[1])}\n${val}\n`;
         }
 
         this.httpPost('mset', function(resp) {
@@ -164,7 +165,6 @@ class RocksHandler {
 
 // private:
 
-
 function _on_response(client, response, on_response) {
     // Retrive body from HTTP responce
     let body = new String(response.slice(response.indexOf('\r\n\r\n') + 4));
@@ -173,7 +173,7 @@ function _on_response(client, response, on_response) {
     on_response(new RocksResponse(body));
 }
 
-function _getBinarySize(str) {
+function _raw_size(str) {
     return Buffer.byteLength(str, 'utf8');
 }
 
