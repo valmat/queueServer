@@ -29,7 +29,6 @@ class RocksResponse
         }
     }
 
-
     isOk() {
         return 'OK' === this.read();
     }

@@ -23,7 +23,6 @@ class RocksHandler
             //console.log({data})
             if(null != data) {
                 client.write("Content-Type: application/x-www-form-urlencoded; charset=UTF-8\r\n");
-                //client.write("Content-Length: " + data.length + "\r\n");
                 client.write("Content-Length: " + _raw_size(data) + "\r\n");
                 
                 client.write("Connection: Close\r\n");
@@ -168,7 +167,12 @@ class RocksHandler
 
 function _on_response(client, response, on_response) {
     // Retrive body from HTTP responce
-    let body = new String(response.slice(response.indexOf('\r\n\r\n') + 4));
+    //let body = new String(response.slice(response.indexOf('\r\n\r\n') + 4));
+    //let body = response.slice(response.indexOf('\r\n\r\n') + 4)
+    //let body = Buffer.from(response.slice(response.indexOf('\r\n\r\n') + 4));
+    //
+    let body = response.slice(response.indexOf('\r\n\r\n') + 4).toString("utf-8");
+    //let body = ""+response.slice(response.indexOf('\r\n\r\n') + 4);
 
     client.destroy();
     on_response(new RocksResponse(body));
@@ -181,8 +185,8 @@ function _raw_size(str) {
 function _obj2str(obj) {
     let ret = '';
     for(let key of Object.keys(obj)) {
-        let val = new String(obj[key]);
-        ret += `${key}\n${val.length}\n${val}\n`;
+        let val = obj[key];
+        ret += `${key}\n${_raw_size(val)}\n${val}\n`;
     }
     return ret;
 }
