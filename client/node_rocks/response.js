@@ -22,8 +22,9 @@ class RocksResponse
             this._body = body.join('\n');
             return rez;
         } else {
-            let rez    = this._body.substring(0, len);
-            this._body = this._body.substring(len+1);
+            let buf =  Buffer.from(this._body, 'utf-8')
+            let rez    = buf.slice(0, len).toString("utf-8");
+            this._body = buf.slice(len+1).toString("utf-8");
             return rez;
         }
     }
