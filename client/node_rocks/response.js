@@ -11,22 +11,19 @@ class Pair
 
 class RocksResponse
 {
+    // @Buffer body
     constructor(body) {
         this._body = body;
     }
 
     // Read line before '\n'
     read(len = 0) {
-        if(0 == len) {
-            let [rez, ...body] = this._body.split('\n');
-            this._body = body.join('\n');
-            return rez;
-        } else {
-            let buf =  Buffer.from(this._body, 'utf-8')
-            let rez    = buf.slice(0, len).toString("utf-8");
-            this._body = buf.slice(len+1).toString("utf-8");
-            return rez;
-        }
+        // if len is not specified read to first '\n' char
+        (0 == len) && (len = this._body.indexOf('\n'));
+
+        let ret    = this._body.slice(0, len).toString("utf-8");
+        this._body = this._body.slice(len+1);
+        return ret;
     }
 
     isOk() {
@@ -55,12 +52,17 @@ class RocksResponse
         }
     }
 
+    // returns buffer
     raw() {
         return this._body;
     }
 
+    toString() {
+        return this._body.toString('utf-8');
+    }
+
     size() {
-        return Buffer.byteLength(this._body, 'utf8')
+        return this._body.length;
     }
 }
 

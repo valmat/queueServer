@@ -20,7 +20,7 @@ class RocksHandler
 
         client.connect(this._server.port, this._server.host, function() {
             client.write("POST /" + path + " HTTP/1.1\r\n");
-            //console.log({data})
+            //console.log({data, l:_raw_size(data)})
             if(null != data) {
                 client.write("Content-Type: application/x-www-form-urlencoded; charset=UTF-8\r\n");
                 client.write("Content-Length: " + _raw_size(data) + "\r\n");
@@ -65,7 +65,8 @@ class RocksHandler
     // Finds first key starts with prefix `from` and replace its prefix to `to`
     moveKey(from, to, on_response = empty_fun) {
         this.httpPost('move-fpref', function(resp) {
-            on_response(resp.isOk(), resp.getPair());
+            let ok = resp.isOk();
+            on_response(ok, ok ? resp.getPair() : resp.getValue());
         }, `${from}\n${to}`);
     }
 
@@ -164,14 +165,18 @@ class RocksHandler
 
 function _on_response(client, response, on_response) {
     // Retrive body from HTTP responce
-    let body = response.slice(response.indexOf('\r\n\r\n') + 4).toString("utf-8");
+    //response.slice(response.indexOf('\r\n\r\n') + 4).toString("utf-8");
+    let body = Buffer.from(response.slice(response.indexOf('\r\n\r\n') + 4));
 
     client.destroy();
     on_response(new RocksResponse(body));
 }
 
 function _raw_size(str) {
-    return Buffer.byteLength(str, 'utf8');
+    if(['string', 'Buffer', 'ArrayBuffer'].indexOf(typeof(str)) > -1) {
+        return Buffer.byteLength(str, 'utf8');
+    }
+    return Buffer.byteLength(''+str, 'utf8');
 }
 
 function _obj2str(obj) {
