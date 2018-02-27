@@ -1,7 +1,6 @@
 "use strict"
 
 
-
 class Pair
 {
     constructor(key = null, value = null) {

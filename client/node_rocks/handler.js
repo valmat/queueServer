@@ -69,7 +69,6 @@ class RocksHandler
         }, `${from}\n${to}`);
     }
 
-
     // set value for key
     set(key, val, on_response = empty_fun) {
         this.httpPost('set', function(resp) {
@@ -140,7 +139,6 @@ class RocksHandler
             this.httpPost('get-incr', cb, `${key}\n${value}` );
     }
 
-
     // multi get key-value pairs by keys
     mget(keys, on_response) {
         this.httpGet('mget', function(resp) {
@@ -162,17 +160,11 @@ class RocksHandler
 }
 
 
-
 // private:
 
 function _on_response(client, response, on_response) {
     // Retrive body from HTTP responce
-    //let body = new String(response.slice(response.indexOf('\r\n\r\n') + 4));
-    //let body = response.slice(response.indexOf('\r\n\r\n') + 4)
-    //let body = Buffer.from(response.slice(response.indexOf('\r\n\r\n') + 4));
-    //
     let body = response.slice(response.indexOf('\r\n\r\n') + 4).toString("utf-8");
-    //let body = ""+response.slice(response.indexOf('\r\n\r\n') + 4);
 
     client.destroy();
     on_response(new RocksResponse(body));
@@ -190,6 +182,5 @@ function _obj2str(obj) {
     }
     return ret;
 }
-
 
 module.exports = RocksHandler;
