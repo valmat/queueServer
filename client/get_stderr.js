@@ -1,21 +1,16 @@
-#!/usr/local/bin/node --max-old-space-size=512
+#!/usr/bin/env node
 
 "use strict"
 
-const options      = require('./configs.js');
-const RocksHandler = require('./node_rocks/handler.js');
-const handler      = new RocksHandler(options);
+const load_cfg         = require('./load_cfg.js');
+const {options, index} = load_cfg('index');
 
+const RocksHandler     = require('./node_rocks/handler.js');
+const handler          = new RocksHandler(options);
 
-
-if (!process.argv[2]) {
-    console.log("Usage:\n" + process.argv[1] + ' <index>');
-    process.exit(0);
-}
-const index = process.argv[2];
 
 const key   = options.prefixes.famaly + options.prefixes.stderr + index;
 
-handler.get(key, function(value) {
+handler.get(key, value => {
     console.log(value);
 });

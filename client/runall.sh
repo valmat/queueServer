@@ -1,12 +1,26 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Префикс для временных файлов
-tmp_prefix=`./get_conf_field.js misc.tmp_prefix`
-next_prefix=`./get_conf_field.js run.next_prefix`
+cd "$(dirname "$0")"
+
+CONFIG="configs.js"
+
+if [[ "$1" != "" ]]; then
+    CONFIG="$1"
+fi
+
+
+if ! [[ -f "$CONFIG" ]]; then
+    echo "File \"$CONFIG\" not found" 1>&2
+    exit 1;
+fi
+
+# The prefix for temporary files
+tmp_prefix=`./get_conf_field.js misc.tmp_prefix $CONFIG`
+next_prefix=`./get_conf_field.js run.next_prefix $CONFIG`
 next_prefix_len=${#next_prefix}
 
 # Получает первую комманду
-cmd=`./gen_cmd.js`
+cmd=`./gen_cmd.js $CONFIG`
 while [ "${cmd:0:next_prefix_len}" == "$next_prefix" ]; do
     # Непосредственно выполняемая команда
     to_run=${cmd:next_prefix_len}
@@ -16,7 +30,7 @@ while [ "${cmd:0:next_prefix_len}" == "$next_prefix" ]; do
     let "index_end_pos=index_end_pos+1"
     to_run=${to_run:index_end_pos}
 
-    # Временные файлы для выходных потоков
+    # Temporary files for output streams
     err_file="${tmp_prefix}_err_${index}"
     out_file="${tmp_prefix}_out_${index}"
 
@@ -25,12 +39,12 @@ while [ "${cmd:0:next_prefix_len}" == "$next_prefix" ]; do
     $($to_run 1> "$out_file" 2> "$err_file")
 
     # Завершаем выполнение
-    ./finish.js "$index" "$out_file" "$err_file"
+    ./finish.js "$index" "$out_file" "$err_file" "$CONFIG"
     rm "$out_file"
     rm "$err_file"
 
     # get next command
-    cmd=`./gen_cmd.js`
+    cmd=`./gen_cmd.js $CONFIG`
 done
 
 echo "DONE"

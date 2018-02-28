@@ -1,10 +1,12 @@
-#!/usr/local/bin/node --max-old-space-size=512
-
+#!/usr/bin/env node
+//
 // Очищает БД, удаляя все ключи
-
+//
 "use strict"
 
-const options      = require('./configs.js');
+const load_cfg  = require('./load_cfg.js');
+const {options} = load_cfg();
+
 const RocksHandler = require('./node_rocks/handler.js');
 const handler      = new RocksHandler(options);
 

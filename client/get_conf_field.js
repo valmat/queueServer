@@ -1,16 +1,11 @@
-#!/usr/local/bin/node --max-old-space-size=512
-
+#!/usr/bin/env node
+//
 // Возвращает поле из конфига
-
+//
 "use strict"
 
-const options = require('./configs.js');
-
-if (!process.argv[2]) {
-    console.log("Usage:\n" + process.argv[1] + ' <field>');
-    process.exit(0);
-}
-const field = process.argv[2];
+const load_cfg         = require('./load_cfg.js');
+const {options, field} = load_cfg("field");
 
 let chain = field.split('.');
 
@@ -19,4 +14,4 @@ for(let e of chain) {
     value = value[e];
 }
 
-console.log(value);
+process.stdout.write(value);

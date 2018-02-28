@@ -1,14 +1,16 @@
-#!/usr/local/bin/node --max-old-space-size=512
-
+#!/usr/bin/env node
+//
 // Заполняет ключи по заданному файлу и правилу
-
+//
 "use strict"
 
-const options      = require('./configs.js');
+const load_cfg     = require('./load_cfg.js');
+const {options}    = load_cfg();
+
 const RocksHandler = require('./node_rocks/handler.js');
 
-const lineReader = require('line-reader');
-const values     = new Map();
+const lineReader   = require('line-reader');
+const values       = new Map();
 
 let line_nom = 0;
 lineReader.eachLine(options.fill.file, function(line, last) {

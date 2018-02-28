@@ -4,7 +4,10 @@
 
 "use strict"
 
-const options      = require('./configs.js');
+const load_cfg  = require('./load_cfg.js');
+const {options, index, out_file, err_file} 
+    = load_cfg('index', 'out_file', 'err_file');
+
 const RocksHandler = require('./node_rocks/handler.js');
 const handler      = new RocksHandler(options);
 
@@ -13,18 +16,6 @@ const lineReader = require('line-reader');
 
 const from_pref  = options.prefixes.famaly + options.prefixes.started;
 const to_pref    = options.prefixes.famaly + options.prefixes.finished;
-
-
-
-
-if (!process.argv[4]) {
-    console.log("Usage:\n" + process.argv[1] + ' <index> <out_file> <err_file>');
-    process.exit(0);
-}
-
-const index    = process.argv[2];
-const out_file = process.argv[3];
-const err_file = process.argv[4];
 
 
 fs.readFile(out_file, 'utf8', function (err, out_content) {

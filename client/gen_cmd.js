@@ -1,12 +1,15 @@
-#!/usr/local/bin/node --max-old-space-size=512
-
+#!/usr/bin/env node
+//
 // Генерирует команду для выполнения bash
-
+//
 "use strict"
 
-const options      = require('./configs.js');
+const load_cfg     = require('./load_cfg.js');
+const {options}    = load_cfg();
+
 const RocksHandler = require('./node_rocks/handler.js');
 const handler      = new RocksHandler(options);
+
 
 const from_pref = options.prefixes.famaly + options.prefixes.created;
 const to_pref   = options.prefixes.famaly + options.prefixes.started;
