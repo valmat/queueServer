@@ -17,7 +17,7 @@ class RocksHandler
     // implements common http post method
     httpPost(path, on_response, data = null) {
         const client = new net.Socket();
-
+        var buffer = "";
         client.connect(this._server.port, this._server.host, function() {
             client.write("POST /" + path + " HTTP/1.1\r\n");
             //console.log({data, l:_raw_size(data)})
@@ -35,7 +35,10 @@ class RocksHandler
             }
         });
         client.on('data', function(response) {
-            _on_response(client, response, on_response);
+            buffer += response
+        });
+        client.on('end', function() {
+            _on_response(client, buffer, on_response);
         });
         client.on('close', empty_fun);
     }
@@ -43,15 +46,19 @@ class RocksHandler
     // implements common http get method
     httpGet(path, on_response, data = null) {
         const client = new net.Socket();
+        var buffer = "";
         client.connect(this._server.port, this._server.host, function() {
             client.write(data ? `GET /${path}?${data} HTTP/1.1\r\n` : `GET /${path} HTTP/1.1\r\n`);
             client.write("Content-Type:charset=UTF-8\r\n");
             client.write("Connection: Close\r\n\r\n");
         });
         client.on('data', function(response) {
-            _on_response(client, response, on_response);
+            buffer += response
         });
-        client.on('close', function() {});
+        client.on('end', function() {
+            _on_response(client, buffer, on_response);
+        });
+        client.on('close', empty_fun);
     }
 
     // get value by key
